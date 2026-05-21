@@ -4,4 +4,6 @@ import org.example.model.User;
 
 public interface UserStorage {
     User create(User user);
+    User findById(Integer id);
+    User update(User user);
 }

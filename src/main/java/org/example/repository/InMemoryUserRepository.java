@@ -18,4 +18,14 @@ public class InMemoryUserRepository implements UserStorage{
         idToUser.put(user.getId(), user);
         return user;
     }
+
+    @Override
+    public User findById(Integer id) {
+        return idToUser.getOrDefault(id, null);
+    }
+
+    public User update(User user){
+        idToUser.put(user.getId(), user);
+        return user;
+    }
 }
