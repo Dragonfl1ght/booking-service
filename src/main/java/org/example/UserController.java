@@ -12,16 +12,18 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User createUser(@RequestBody User user){
+    public User create(@RequestBody User user){
         return userService.create(user);
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        User update = userService.update(user);
-        if (update == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(update);
+    public ResponseEntity<User> update(@RequestBody User user){
+        return ResponseEntity.ok(userService.update(user));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") int id){
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

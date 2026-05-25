@@ -5,6 +5,7 @@ import org.example.model.User;
 import org.example.utility.IdGenerator;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -20,12 +21,16 @@ public class InMemoryUserRepository implements UserStorage{
     }
 
     @Override
-    public User findById(Integer id) {
-        return idToUser.getOrDefault(id, null);
+    public Optional<User> findById(Integer id) {
+        return Optional.ofNullable(idToUser.get(id));
     }
 
     public User update(User user){
         idToUser.put(user.getId(), user);
         return user;
+    }
+
+    public void delete(int id){
+        idToUser.remove(id);
     }
 }
