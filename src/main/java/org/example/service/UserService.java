@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.model.User;
@@ -18,11 +18,11 @@ public class UserService {
 
     public User update(User user){
         Optional<User> byId = userRepository.findById(user.getId());
-        User userOfOprional = byId.orElseThrow(() -> new RuntimeException("User not found: " + user.getId()));
-        userOfOprional.setName(user.getName());
-        userOfOprional.setEmail(user.getEmail());
-        userRepository.update(userOfOprional);
-        return userOfOprional;
+        User optionalUser = byId.orElseThrow(() -> new RuntimeException("User not found: " + user.getId()));
+        optionalUser.setName(user.getName());
+        optionalUser.setEmail(user.getEmail());
+        userRepository.update(optionalUser);
+        return optionalUser;
     }
 
     public void delete(int id){

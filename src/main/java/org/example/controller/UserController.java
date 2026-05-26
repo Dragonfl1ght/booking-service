@@ -1,7 +1,8 @@
-package org.example;
+package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.model.User;
+import org.example.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

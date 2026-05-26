@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @RequiredArgsConstructor
-public class InMemoryUserRepository implements UserStorage{
+public class InMemoryUserRepository implements UserStorage {
     private final ConcurrentHashMap<Integer, User> idToUser = new ConcurrentHashMap<>();
     private final IdGenerator idGenerator;
 
