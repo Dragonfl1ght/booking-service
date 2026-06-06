@@ -1,12 +1,19 @@
 package org.example.model;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 @Data
 public class User {
     private Integer id;
-    @Length(min = 3, max = 10)
+
+    @NotBlank
+    @Size(min = 3, max = 10)
     private String name;
+
+    @Email
+    @NotBlank
     private String email;
 }
