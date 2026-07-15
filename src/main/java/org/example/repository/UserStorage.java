@@ -10,6 +10,6 @@ public interface UserStorage {
     Optional<User> findById(Integer id);
     List<User> findAll();
     User update(User user);
-    void delete(int id);
-    boolean isExist(int id);
+    void delete(Integer id);
+    boolean isExist(Integer id);
 }

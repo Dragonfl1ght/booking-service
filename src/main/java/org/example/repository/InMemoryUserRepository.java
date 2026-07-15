@@ -16,12 +16,14 @@ public class InMemoryUserRepository implements UserStorage {
     private final ConcurrentHashMap<Integer, User> idToUser = new ConcurrentHashMap<>();
     private final IdGenerator idGenerator;
 
+    @Override
     public User create(User user){
         user.setId(idGenerator.nextId());
         idToUser.put(user.getId(), user);
         return user;
     }
 
+    @Override
     public List<User> findAll() {
         return new ArrayList<>(idToUser.values());
     }
@@ -31,17 +33,19 @@ public class InMemoryUserRepository implements UserStorage {
         return Optional.ofNullable(idToUser.get(id));
     }
 
+    @Override
     public User update(User user){
         idToUser.put(user.getId(), user);
         return user;
     }
 
-    public void delete(int id){
+    @Override
+    public void delete(Integer id){
         idToUser.remove(id);
     }
 
     @Override
-    public boolean isExist(int id) {
+    public boolean isExist(Integer id) {
         return idToUser.containsKey(id);
     }
 }

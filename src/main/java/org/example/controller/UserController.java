@@ -26,13 +26,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") int id){
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
+    public User delete(@PathVariable Integer id){
+        return userService.delete(id);
+
     }
 
     @GetMapping("/{id}")
-    public User findById(@PathVariable("id") int id){
+    public User findById(@PathVariable Integer id){
         return userService.findById(id);
     }
 

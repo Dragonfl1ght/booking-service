@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handle(NotFoundException ex) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handle(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
