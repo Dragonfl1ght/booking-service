@@ -19,6 +19,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidMeetingStartEndTimeException.class)
+    public ResponseEntity<String> handle(InvalidMeetingStartEndTimeException ex) {
+        log.warn(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidation(MethodArgumentNotValidException ex) {
         String collect = ex.getBindingResult().getFieldErrors().stream()

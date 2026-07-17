@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.model.Meeting;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MeetingStorage {
@@ -9,4 +10,5 @@ public interface MeetingStorage {
     Optional<Meeting> findById(Integer id);
     Meeting update(Meeting meeting);
     void delete(int id);
+    List<Meeting> findAllByOwner(Integer id);
 }

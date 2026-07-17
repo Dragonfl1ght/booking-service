@@ -3,7 +3,9 @@ package org.example.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.model.Meeting;
 import org.example.model.User;
+import org.example.service.MeetingService;
 import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final MeetingService meetingService;
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody @Valid User user){
@@ -50,7 +53,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<User>> findAll(){
-        log.info("Получен запрос на список всех пользователей");
+        log.info("Получен запрос на поиск всех пользователей");
         return ResponseEntity.ok(userService.findAll());
+    }
+
+    @GetMapping("{id}/meetings")
+    public ResponseEntity<List<Meeting>> findAllAvailableMeetingsByOwnerId(@PathVariable Integer id) {
+        log.info("Получен запрос на поиск всех встреч пользователя с id = {}", id);
+        return ResponseEntity.ok(meetingService.findAllByOwnerId(id));
     }
 }

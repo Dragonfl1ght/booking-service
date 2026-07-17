@@ -5,8 +5,11 @@ import org.example.model.Meeting;
 import org.example.utility.IdGenerator;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+
 @Component
 @RequiredArgsConstructor
 public class InMemoryMeetingRepository implements MeetingStorage {
@@ -35,4 +38,13 @@ public class InMemoryMeetingRepository implements MeetingStorage {
     public void delete(int id) {
         idToMeeting.remove(id);
     }
+
+    @Override
+    public List<Meeting> findAllByOwner(Integer id){
+        return idToMeeting.values()
+                .stream()
+                .filter(m -> m.getUserId().equals(id))
+                .toList();
+    }
+
 }
