@@ -1,5 +1,9 @@
 package org.example.model;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
@@ -7,9 +11,11 @@ import java.time.Instant;
 @Data
 public class Meeting {
     private Integer id;
-    private Integer userId;
-    private Instant startTime;
-    private Instant endTime;
+    @NotNull private Integer userId;
+    @Future private Instant startTime;
+    @Future private Instant endTime;
     private Status status;
+    @Max(8)
+    @Min(1)
     private Integer maxParticipants;
 }

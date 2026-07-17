@@ -40,8 +40,10 @@ public class InMemoryUserRepository implements UserStorage {
     }
 
     @Override
-    public void delete(Integer id){
+    public User delete(Integer id){
+        User user = idToUser.get(id);
         idToUser.remove(id);
+        return user;
     }
 
     @Override

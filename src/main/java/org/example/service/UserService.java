@@ -29,16 +29,18 @@ public class UserService {
     }
 
     public User update(User user){
+        log.debug("Выполняется обновление пользователя {}", user);
         Integer userId = user.getId();
         userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(String.format("Пользователь с id = %d не найден", userId)));
+                .orElseThrow(() -> new UserNotFoundException(String.format("При обновлении пользователь с id = %d не найден", userId)));
         user = userRepository.update(user);
+        log.debug("Пользователь успешно обновлен {}", user);
         return user;
     }
 
     public User delete(int id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found: " + id));
+                .orElseThrow(() -> new UserNotFoundException("При удалении пользователь с id = %d не найден" + id));
         userRepository.delete(id);
         return user;
     }
