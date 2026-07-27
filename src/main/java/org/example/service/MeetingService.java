@@ -2,7 +2,6 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.exception.InvalidMeetingStartEndTimeException;
 import org.example.exception.UserNotFoundException;
 import org.example.model.Meeting;
 import org.example.model.Status;
@@ -24,9 +23,9 @@ public class MeetingService {
         userRepository.findById(meeting.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(String.format("При создании встречи не найден организатор с id = %s", meeting.getUserId())));
 
-        if (meeting.getStartTime().isAfter(meeting.getEndTime())) {
-            throw new InvalidMeetingStartEndTimeException(String.format("Время завершения встречи %s не может быть раньше времени начала", meeting));
-        }
+//        if (meeting.getStartTime().isAfter(meeting.getEndTime())) {
+//            throw new InvalidMeetingStartEndTimeException(String.format("Время завершения встречи %s не может быть раньше времени начала", meeting));
+//        }
 
         meeting.setStatus(Status.AVAILABLE);
 

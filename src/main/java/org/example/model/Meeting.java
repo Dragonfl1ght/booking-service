@@ -9,6 +9,7 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
+@EndDateTimeAfterStart
 public class Meeting {
     private Integer id;
     @NotNull private Integer userId;
