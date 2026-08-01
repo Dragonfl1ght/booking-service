@@ -3,6 +3,7 @@ package org.example.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.model.Booking;
 import org.example.model.Meeting;
 import org.example.service.MeetingService;
 import org.springframework.http.HttpStatus;
@@ -22,4 +23,12 @@ public class MeetingController {
         Meeting newMeeting = service.create(meeting);
         return ResponseEntity.status(HttpStatus.CREATED).body(newMeeting);
     }
+
+    @PostMapping("/booking")
+    public ResponseEntity<Booking> book(@RequestBody @Valid Booking booking){
+        log.info("Получен запрос на бронирование встречи {}", booking);
+        Booking newBooking = service.book(booking);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newBooking);
+    }
+
 }

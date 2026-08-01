@@ -1,8 +1,11 @@
 package org.example.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exception.MeetingNotFoundException;
 import org.example.exception.UserNotFoundException;
+import org.example.model.Booking;
 import org.example.model.Meeting;
 import org.example.model.Status;
 import org.example.repository.InMemoryUserRepository;
@@ -45,7 +48,15 @@ public class MeetingService {
         return meetingRepository.update(meeting);
     }
 
+
+
     public void delete(int id) {
+
+    }
+
+    public Booking book(@Valid Booking booking) {
+        Integer meetingId = booking.getMeetingId();
+        Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(() -> new MeetingNotFoundException(String.format("При бронировании не найдена встреча с id = %s", booking.getMeetingId())));
 
     }
 }

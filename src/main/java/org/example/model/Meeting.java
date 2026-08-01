@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @EndDateTimeAfterStart
@@ -19,4 +21,5 @@ public class Meeting {
     @Max(8)
     @Min(1)
     private Integer maxParticipants;
+    private List<Booking> bookings = new ArrayList<>();
 }
