@@ -3,16 +3,20 @@ package org.example.service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exception.MeetingConflictException;
 import org.example.exception.MeetingNotFoundException;
 import org.example.exception.UserNotFoundException;
 import org.example.model.Booking;
 import org.example.model.Meeting;
 import org.example.model.Status;
+import org.example.model.User;
 import org.example.repository.InMemoryUserRepository;
 import org.example.repository.MeetingStorage;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -20,24 +24,45 @@ import java.util.List;
 public class MeetingService {
     private final MeetingStorage meetingRepository;
     private final InMemoryUserRepository userRepository;
+    private final ConcurrentHashMap<Integer, Object> userLocks = new ConcurrentHashMap<>();
 
     public Meeting create(Meeting meeting) {
         log.debug("Выполняется создание встречи {}", meeting);
-        userRepository.findById(meeting.getUserId())
+        User user = userRepository.findById(meeting.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(String.format("При создании встречи не найден организатор с id = %s", meeting.getUserId())));
 
-//        if (meeting.getStartTime().isAfter(meeting.getEndTime())) {
-//            throw new InvalidMeetingStartEndTimeException(String.format("Время завершения встречи %s не может быть раньше времени начала", meeting));
-//        }
+        Instant newStart = meeting.getStartTime();
+        Instant newEnd = meeting.getEndTime();
 
-        meeting.setStatus(Status.AVAILABLE);
+        Object lock = userLocks.computeIfAbsent(user.getId(), k -> new Object());
 
-        log.debug("Встреча успешно создана {}", meeting);
+        Meeting newMeeting;
 
-        return meetingRepository.create(meeting);
+        synchronized (lock) {
+            List<Meeting> allByOwnerId = findAllByOwnerId(user.getId());
+            for (Meeting m : allByOwnerId) {
+                var mStart = m.getStartTime();
+                var mEnd = m.getEndTime();
+
+                if (newEnd.isAfter(mStart) && newStart.isBefore(mEnd)) {
+                    throw new MeetingConflictException(
+                            String.format("Встреча пересекается с существующей встречей id=%d [%s - %s]",
+                                    m.getId(), m.getStartTime(), m.getEndTime())
+                    );
+                }
+            }
+
+            meeting.setStatus(Status.AVAILABLE);
+
+            newMeeting = meetingRepository.create(meeting);
+
+            log.debug("Встреча успешно создана {}", meeting);
+        }
+
+        return newMeeting;
     }
 
-    public List<Meeting> findAllByOwnerId(Integer id){
+    public List<Meeting> findAllByOwnerId(Integer id) {
         return meetingRepository.findAllByOwner(id);
     }
 
@@ -47,7 +72,6 @@ public class MeetingService {
         //etc
         return meetingRepository.update(meeting);
     }
-
 
 
     public void delete(int id) {
